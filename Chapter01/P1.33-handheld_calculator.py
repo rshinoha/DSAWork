@@ -15,13 +15,27 @@ off = 'o'
 # Symbol for error
 error = 'e'
 
-def get_num(str_input, cur_pos = 0):
+def get_num(str_input):
 	"""
-	Given a string, str_input, and current position of the string, cur_pos, returns
-	a valid number, n, and the updated position in the string, i. If there is an
-	invalid input before an operator or a clear/off button input, the function will
-	halt any further reads and will return the error symbol.
+	Given a string, str_input, returns a valid number. All invalid
+	characters and extra decimals will be ignored.
 	"""
 	numeric_symbols = ['-', '.']
-	i = cur_pos
-	while str_input[i] in numeric_symbols or 
+	# stores temp string
+	num_str = ''
+	for i in range(len(str_input)):
+		if str_input[i].isnumeric() or str_input[i] in numeric_symbols:
+			num_str += str_input[i]
+		if str_input[i] == '-' or len(num_str) > 0:
+			numeric_symbols[0] = ''
+		if str_input[i] == '.':
+			numeric_symbols[1] = ''
+	if '.' in num_str:
+		return float(num_str)
+	else:
+		return int(num_str)
+
+tempStr = input('Enter a number: ')
+tempNum = get_num(tempStr)
+print(tempNum)
+print(type(tempNum))
