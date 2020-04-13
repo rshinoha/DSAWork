@@ -99,6 +99,8 @@ def main():
 				new_num = 0
 			elif operator == '=':
 				operator = ''
+				cur_num = new_num
+				new_num = 0
 			else:
 				cur_num = calculate(operator, new_num, cur_num)
 				operator = ''
@@ -108,7 +110,7 @@ def main():
 				str_input = input()
 				operator = get_operator(str_input)
 		if not off:
-			print(cur_num)
+			print('Screen: {}'.format(cur_num))
 
 if __name__ == "__main__":
 	main()
