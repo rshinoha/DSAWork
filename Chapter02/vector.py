@@ -1,5 +1,5 @@
 # Data Structures and Algorithms in Python Ch.2 (Goodrich et. al.)
-# Reinforcement exercises R-2.5 to R-2.8
+# Reinforcement exercises R-2.9 to R-2.15
 # Ryoh Shinohara
 # =======================================================================================
 # **R-2.9** Implement the `__sub__` method for the `Vector` class of Section 2.3.3, so
