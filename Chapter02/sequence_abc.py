@@ -19,6 +19,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Data Structures and Algorithms in Python Ch.2 (Goodrich et. al.)
+# Reinforcement exercises R-2.22 and R-2.23
+# Ryoh Shinohara
+# =======================================================================================
+# **R-2.22** The `collections.Sequence` abstract base class does not provide support for
+# comparing two sequences to each other. Modify our `Sequence` class from Code Fragment
+# 2.14 to include a definition for the `__eq__` method, so that expression `seq1 == seq2`
+# will return `True` precisely when the two sequences are element by element equivalent.
+
+
 from abc import ABCMeta, abstractmethod           # need these definitions
 
 class Sequence(metaclass=ABCMeta):
@@ -53,3 +63,65 @@ class Sequence(metaclass=ABCMeta):
       if self[j] == val:                          # found a match
         k += 1
     return k
+
+  def __eq__(self, other):
+    """Returns True if two sequences are identical"""
+    for j in range(len(self)):
+      if self[j] != other[j]:
+        return False
+    return True
+  
+  def __lt__(self, other):
+    """Returns True if self < other"""
+    for j in range(len(self)):
+      if self[j] < other[j]:
+        return True
+    return False
+
+class Range(Sequence):
+  """A class that mimic's the built-in range class."""
+
+  def __init__(self, start, stop=None, step=1):
+    """Initialize a Range instance.
+
+    Semantics is similar to built-in range class.
+    """
+    if step == 0:
+      raise ValueError('step cannot be 0')
+      
+    if stop is None:                  # special case of range(n)
+      start, stop = 0, start          # should be treated as if range(0,n)
+
+    # calculate the effective length once
+    self._length = max(0, (stop - start + step - 1) // step)
+
+    # need knowledge of start and step (but not stop) to support __getitem__
+    self._start = start
+    self._step = step
+
+  def __len__(self):
+    """Return number of entries in the range."""
+    return self._length
+
+  def __getitem__(self, k):
+    """Return entry at index k (using standard interpretation if negative)."""
+    if k < 0:
+      k += len(self)                  # attempt to convert negative index
+
+    if not 0 <= k < self._length:
+      raise IndexError('index out of range')
+
+    return self._start + k * self._step
+
+if __name__ == "__main__":
+  r1 = Range(10)          # [0, 1, ..., 9]
+  r2 = Range(0,10,1)      # Same as r2
+  r3 = Range(0,10,2)
+  print(r1[5])            # print 5
+  print(10 in r1)         # print False
+  print(r1.index(5))      # print 5
+  print(r1.count(5))      # print 1
+  print(r1 == r2)         # print True
+  print(r1 == r3)         # print False
+  print(r1 > r2)          # print False
+  print(r3 > r2)          # print True
