@@ -21,6 +21,7 @@
 
 # Data Structures and Algorithms in Python Ch.2 (Goodrich et. al.)
 # Reinforcement exercises R-2.9 to R-2.15
+# Creativity exercise C-2.25
 # Ryoh Shinohara
 # =======================================================================================
 # **R-2.9** Implement the `__sub__` method for the `Vector` class of Section 2.3.3, so
@@ -128,6 +129,7 @@ class Vector:
             result[j] = other[j] - self[j]
         return result
 
+    # C-2.25 solution
     def __mul__(self, other):
         """
         Returns a scalar multiple if other is a number or a dot product if another Vector or list
