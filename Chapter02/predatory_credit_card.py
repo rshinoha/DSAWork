@@ -141,6 +141,6 @@ if __name__ == "__main__":
   card.make_payment(1.3)
   card.need_late_fee()
   print(card.get_late_fee())    # print False
-  print(card.get_balance())
+  print(card.get_balance())     # print 124.72733485467704
   card.set_balance(500)
-  print(card.get_balance())
+  print(card.get_balance())     # print 500
