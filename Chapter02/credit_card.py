@@ -1,5 +1,5 @@
 # Data Structures and Algorithms in Python Ch.2 (Goodrich et. al.)
-# Reinforcement exercises R-2.5 to R-2.8
+# Reinforcement exercises R-2.5 to R-2.8 and Creativity exercise 2.30
 # Ryoh Shinohara
 # =======================================================================================
 # **R-2.5** Use the techniques of Section 1.7 to revise the charge and make payment
@@ -18,6 +18,12 @@
 # **R-2.8** Modify the declaration of the first for loop in the CreditCard tests, from
 # Code Fragment 2.3, so that it will eventually cause exactly one of the three credit
 # cards to go over its credit limit. Which credit card is it?
+#
+# **C-2.30** At the close of Section 2.4.1, we suggest a model in which the `CreditCard`
+# class supports a nonpublic method, `set_balance(b)`, that could be used by subclasses
+# to affect a change to the balance, without directly accessing the `_balance` data
+# member. Implement such a model, revising both the `CreditCard` and
+# `PredatoryCreditCard` classes accordingly.
 
 class CreditCard:
     """
@@ -72,6 +78,10 @@ class CreditCard:
         Returns current balance
         """
         return self._balance
+
+    def set_balance(self, balance):
+        """Sets a new balance"""
+        self._balance = balance
     
     def charge(self, price):
         """
