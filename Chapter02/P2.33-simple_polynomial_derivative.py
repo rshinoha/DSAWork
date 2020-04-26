@@ -1,3 +1,10 @@
+# Data Structures and Algorithms in Python Ch.2 (Goodrich et. al.)
+# Project exercise P-2.33
+# Ryoh Shinohara
+# =======================================================================================
+# Write a Python program that inputs a polynomial in standard algebraic notation and
+# outputs the first derivative of that polynomial.
+
 OPERATORS = ['+', '-', '*', '/']
 EXPONENT = '^'
 
@@ -204,24 +211,23 @@ def combine_terms(terms, operators=[]):
                 raise ValueError()
     return poly_str
 
-if __name__ == "__main__":
-    def print_poly_and_deriv(poly):
-        """
-        Temporary function that parses string input and prints out
-        polynomial and its derivating
-        """
-        t, o = parse_polynomial(poly)
-        t_list = list_to_term(t)
-        print(combine_terms(t_list, o))
-        deriv_list = [i.derivative() for i in t_list]
-        print(combine_terms(deriv_list, o))
+def generate_derivative(poly):
+    """
+    Given a string, poly, containing a polynomial, generates its
+    derivative
+    """
+    t, o = parse_polynomial(poly)
+    t_list = list_to_term(t)
+    deriv_list = [i.derivative() for i in t_list]
+    print("Derivative of {} is {}".format(combine_terms(t_list, o), combine_terms(deriv_list, o)))
 
+if __name__ == "__main__":
     poly1 = "2x+    2"
     poly2 = "x^2+\n3.5x-2"
     poly3 = "-1.2x+2 - 2x^-1"
     poly4 = "0"
 
-    print_poly_and_deriv(poly1)
-    print_poly_and_deriv(poly2)
-    print_poly_and_deriv(poly3)
-    print_poly_and_deriv(poly4)
+    generate_derivative(poly1)
+    generate_derivative(poly2)
+    generate_derivative(poly3)
+    generate_derivative(poly4)
