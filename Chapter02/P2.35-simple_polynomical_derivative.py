@@ -110,7 +110,10 @@ def parse_polynomial(str_input):
     i = 0
     while i < len(poly):
         if not poly[i].isalpha():
-            while i < len(poly) and not poly[i].isalpha():
+            if poly[i] == '-':
+                coef += poly[i]
+                i += 1
+            while i < len(poly) and not poly[i].isalpha() and poly[i] not in OPERATORS:
                 coef += poly[i]
                 i += 1
         if i < len(poly) and poly[i].isalpha():
@@ -124,10 +127,10 @@ def parse_polynomial(str_input):
             while i < len(poly) and not poly[i] in OPERATORS:
                 exp += poly[i]
                 i += 1
-        term_list.append([coef, var, exp])
         if i < len(poly) and poly[i] in OPERATORS:
             operator_list.append(poly[i])
             i += 1
+        term_list.append([coef, var, exp])
         coef = ''
         var = ''
         exp = ''
@@ -171,63 +174,54 @@ def list_to_term(poly_list):
         i += 1
     return term_list
 
-def combine_terms(terms, operators):
+def combine_terms(terms, operators=[]):
     """
     Given a list of terms and operators, combines all strings to form a
-    new string
+    new string representing polynomials
     """
     if len(operators) == 0:
-        return (terms[0].str_term())
-    else:
-        i = 0
-        poly_str = term[i].str_term()
-        while i < len(operators):
-            if operators[i] == '-' and terms[i+1].get_coef() < 0:
-                poly_str += '+' + terms[i+1].str_term()[1:]
+        if len(terms) == 1:
+            return (terms[0].str_term())
+        else:
+            operators = ['+' for i in range(len(terms) - 1)]
+    i = 0
+    poly_str = terms[i].str_term()
+    for i in range(len(operators)):
+        if terms[i+1].get_coef() == 0:
+            pass
+        else:
+            if operators[i] == '+':
+                if terms[i+1].get_coef() < 0:
+                    poly_str += '-' + terms[i+1].str_term()[1:]
+                else:
+                    poly_str += operators[i] + terms[i+1].str_term()
+            elif operators[i] == '-':
+                if terms[i+1].get_coef() < 0:
+                    poly_str += '+' + terms[i+1].str_term()[1:]
+                else:
+                    poly_str += operators[i] + terms[i+1].str_term()
             else:
-                poly_str += operators[i] + terms[i+1].str_term()
+                raise ValueError()
     return poly_str
 
 if __name__ == "__main__":
-    # Test Term class
-    # term1 = Term(-2.3, 'y', 3)
-    # print(term1.str_term())         # print -2.3y^3
-    # print("derivative: {}".format(term1.derivative().str_term()))
+    def print_poly_and_deriv(poly):
+        """
+        Temporary function that parses string input and prints out
+        polynomial and its derivating
+        """
+        t, o = parse_polynomial(poly)
+        t_list = list_to_term(t)
+        print(combine_terms(t_list, o))
+        deriv_list = [i.derivative() for i in t_list]
+        print(combine_terms(deriv_list, o))
 
-    # term2 = Term(var='x', exp=1)
-    # print(term2.str_term())         # print x
-    # print("derivative: {}".format(term2.derivative().str_term()))
+    poly1 = "2x+    2"
+    poly2 = "x^2+\n3.5x-2"
+    poly3 = "-1.2x+2 - 2x^-1"
+    poly4 = "0"
 
-    # term3 = Term(coef=5)
-    # print(term3.str_term())         # print 5
-    # print("derivative: {}".format(term3.derivative().str_term()))
-
-    # term4 = Term(coef=4, exp=1)
-    # print(term4.str_term())         # print 4x
-    # print("derivative: {}".format(term4.derivative().str_term()))
-
-    # term5 = Term(exp=-3)
-    # print(term5.str_term())         # print x^-3
-    # print("derivative: {}".format(term5.derivative().str_term()))
-
-    # term6 = Term(0)
-    # print(term6.str_term())         # print 0
-    # print("derivative: {}".format(term6.derivative().str_term()))
-
-    poly1 = "2x+2"
-    poly2 = "x^2+3.5x-2"
-    poly3 = "-1.2x - 2"
-    poly4 = "3"
-
-    t1, o1 = parse_polynomial(poly1)
-    term_list1 = list_to_term(t1)
-
-
-    # t2, o2 = parse_polynomial(poly2)
-    # term_list2 = list_to_term(t2)
-
-    # t3, o3 = parse_polynomial(poly3)
-    # term_list3 = list_to_term(t3)
-
-    # t4, o4 = parse_polynomial(poly4)
-    # term_list4 = list_to_term(t4)
+    print_poly_and_deriv(poly1)
+    print_poly_and_deriv(poly2)
+    print_poly_and_deriv(poly3)
+    print_poly_and_deriv(poly4)
