@@ -126,8 +126,8 @@ def parse_polynomial(str_input):
         if i < len(poly) and poly[i].isalpha():
             var = poly[i]
             i += 1
-        if i < len(poly) and poly[i] == EXPONENT:
-            i += 1
+        if i < len(poly) and poly[i] == EXPONENT[0]:
+            i += len(EXPONENT)
             if poly[i] == '-':
                 exp += poly[i]
                 i += 1
