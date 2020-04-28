@@ -1,0 +1,104 @@
+# Data Structures and Algorithms in Python Ch.2 (Goodrich et. al.)
+# Project exercise P-2.34
+# Ryoh Shinohara
+# =======================================================================================
+# Write a Python program that inputs a document and then outputs a bar chart plot of the
+# frequencies of each alphabet character that appears in that document.
+
+# Set chart height to 26 lines on console
+CHART_HEIGHT = 26
+# Number of lines in between major ticks
+MINOR_TICK_SECTION = 5
+
+class BarChart():
+    """Creates bar chart based on dictionary data"""
+    def __init__(self, data, sort_value=True, symbol='#'):
+        """
+        Creates bar chart object
+        
+        * data: dictionary containing variable names as keys and counts as values
+        * sort_value: whether bar chart should be sorted by value or not; default
+          True; if False, sorts by keys lexicographically
+        * symbol: symbol to use for bars
+        """
+        if isinstance(data, dict):
+            if all([isinstance(v, int) for v in data.values()]):
+                self._data = data
+            else:
+                raise TypeError('values must be numeric')
+        else:
+            raise TypeError('data must be a dictionary')
+        self._sort_value = sort_value
+        self._symbol = symbol
+
+    def get_data(self):
+        """Returns dictionary of data"""
+        return self._data
+
+    def get_sort_value(self):
+        """Returns whether bar chart will be sorted by value or not"""
+        return self._sort_value
+
+    def get_symbol(self):
+        """Returns the symbol that will be used for bars"""
+        return self._symbol
+
+    def _determine_ticks(self):
+        """Determines major and minor tick values"""
+        major = 0
+        max_num = max(self._data.values())
+        if max_num > 1000:
+            raise ValueError('data values must be less than 1000')
+        elif max_num > 500:
+            major = 200
+        elif max_num > 100:
+            major = 100
+        elif max_num > 50:
+            major = 10
+        else:
+            major = 5
+        minor = major // MINOR_TICK_SECTION
+        return major, minor
+
+    def _determine_bar_heights(self, major, minor, sorted_list):
+        """Determines bar heights for each data value"""
+        bar_heights = []
+        for i in sorted_list:
+            bar_heights.append(CHART_HEIGHT - 1 - (self._data[i] // major + self._data[i] // minor))
+        return bar_heights
+
+    def plot(self):
+        """
+        A very naive implementation for plotting a bar chart of the data as a
+        list of strings
+        
+        Limitations:
+        * Will only tolerate max value counts of 1000
+        * Inflexible axis tick marks
+        * When in between minor tick marks, the value will be rounded down
+        """
+        # Stores bar chart as list of strings
+        chart = []
+        if self._sort_value:
+            sorted_data = sorted(self._data, key=self._data.__getitem__, reverse=True)
+        else:
+            sorted_data = sorted(self._data)
+        major, minor = self._determine_ticks()
+        # Padding added for major tick value strings shorter than the max value
+        # string length
+        left_padding = len(str(major * (CHART_HEIGHT // MINOR_TICK_SECTION)))
+        bar_heights = self._determine_bar_heights()
+        for i in range(CHART_HEIGHT - 1):
+            temp_str = ''
+        
+
+        print(sorted_data)
+        print(major)
+        print(minor)
+        print(left_padding)
+        
+        pass
+
+if __name__ == "__main__":
+    data1 = {'a':273, 'b':87, 'c':113, 'd':178, 'e':251}
+    bar1 = BarChart(data1)
