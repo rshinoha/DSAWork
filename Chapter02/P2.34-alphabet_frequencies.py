@@ -87,18 +87,40 @@ class BarChart():
         # Padding added for major tick value strings shorter than the max value
         # string length
         left_padding = len(str(major * (CHART_HEIGHT // MINOR_TICK_SECTION)))
-        bar_heights = self._determine_bar_heights()
+        bar_heights = self._determine_bar_heights(major, minor, sorted_data)
+        count = CHART_HEIGHT // MINOR_TICK_SECTION
         for i in range(CHART_HEIGHT - 1):
             temp_str = ''
+            print(i % MINOR_TICK_SECTION)
+            print(CHART_HEIGHT // MINOR_TICK_SECTION)
+            if i % MINOR_TICK_SECTION == 0 and CHART_HEIGHT // MINOR_TICK_SECTION != 0:
+                temp_str += ' ' * (left_padding - len(str(major * count))) + str(major * count) + '| '
+                count -= 1
+            else:
+                temp_str += ' ' * left_padding + '| '
+            for j in range(len(sorted_data)):
+                if i < bar_heights[j]:
+                    temp_str += ' ' * 4
+                else:
+                    temp_str += self._symbol * 3 + ' '
+            chart.append(temp_str)
+        temp_str = ' ' * left_padding + '|_'
+        for j in range(len(sorted_data)):
+            if bar_heights[j] < CHART_HEIGHT - 2:
+                temp_str += self._symbol * 3 + '_'
+            else:
+                temp_str += '_' * 4
+        chart.append(temp_str)
+        temp_str = ' ' * (left_padding + 2)
+        for j in range(len(sorted_data)):
+            temp_str += ' ' + sorted_data[j] + '  '
+        chart.append(temp_str)
+        return chart
         
-
-        print(sorted_data)
-        print(major)
-        print(minor)
-        print(left_padding)
-        
-        pass
 
 if __name__ == "__main__":
-    data1 = {'a':273, 'b':87, 'c':113, 'd':178, 'e':251}
+    data1 = {'a':273, 'b':0, 'c':113, 'd':178, 'e':251}
     bar1 = BarChart(data1)
+    chart1 = bar1.plot()
+    for line in chart1:
+        print(line)
