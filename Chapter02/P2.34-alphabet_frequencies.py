@@ -9,6 +9,10 @@
 CHART_HEIGHT = 26
 # Number of lines in between major ticks
 MINOR_TICK_SECTION = 5
+# Integer representation of 'a'
+A = ord('a')
+# Number of letters in the alphabet
+NUM_LETTERS = 26
 
 class BarChart():
     """Creates bar chart based on dictionary data"""
@@ -91,8 +95,6 @@ class BarChart():
         count = CHART_HEIGHT // MINOR_TICK_SECTION
         for i in range(CHART_HEIGHT - 1):
             temp_str = ''
-            print(i % MINOR_TICK_SECTION)
-            print(CHART_HEIGHT // MINOR_TICK_SECTION)
             if i % MINOR_TICK_SECTION == 0 and CHART_HEIGHT // MINOR_TICK_SECTION != 0:
                 temp_str += ' ' * (left_padding - len(str(major * count))) + str(major * count) + '| '
                 count -= 1
@@ -106,7 +108,7 @@ class BarChart():
             chart.append(temp_str)
         temp_str = ' ' * left_padding + '|_'
         for j in range(len(sorted_data)):
-            if bar_heights[j] < CHART_HEIGHT - 2:
+            if bar_heights[j] < CHART_HEIGHT - 1:
                 temp_str += self._symbol * 3 + '_'
             else:
                 temp_str += '_' * 4
@@ -117,10 +119,30 @@ class BarChart():
         chart.append(temp_str)
         return chart
         
+def read_doc(doc):
+    """
+    Takes in a document name and returns the count of each letter found in
+    the document as a dictionary
+    """
+    letters = [chr(i + A) for i in range(NUM_LETTERS)]
+    # Initialize dictionary of letters with 0 as values
+    chr_dict = {key: 0 for key in letters}
+    with open(doc, 'r') as reader:
+        for line in reader:
+            lower = line.lower()
+            for c in lower:
+                if c.isalpha():
+                    chr_dict[c] += 1
+    return chr_dict
+
+def print_chart(chart):
+    """Prints bar chart"""
+    for i in chart:
+        print(i)
 
 if __name__ == "__main__":
-    data1 = {'a':273, 'b':0, 'c':113, 'd':178, 'e':251}
-    bar1 = BarChart(data1)
-    chart1 = bar1.plot()
-    for line in chart1:
-        print(line)
+    doc = "more_progressions.py"
+    chr_dict = read_doc(doc)
+    bar = BarChart(chr_dict)
+    chart = bar.plot()
+    print_chart(chart)
